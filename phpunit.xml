@@ -2,6 +2,7 @@
 <phpunit bootstrap="vendor/autoload.php"
          backupGlobals="false"
          backupStaticAttributes="false"
+         printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter"
          colors="true"
          verbose="true"
          convertErrorsToExceptions="true"
