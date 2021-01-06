@@ -12,7 +12,9 @@
     ],
     "minimum-stability": "dev",
     "prefer-stable":true,
-    "require": {},
+    "require": {
+        "monolog/monolog": "^1.12|^2.0"
+    },
     "require-dev": {
         "fzaninotto/faker": "^1.9@dev",
         "illuminate/support": "^7.0",
