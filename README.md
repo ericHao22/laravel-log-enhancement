@@ -6,8 +6,10 @@
 
 A library with logging enhancement. Including:
 
-- `LogWithClassPath` trait
-  - It adds convinient methods for logging to add class path into context.
+- `LoggerFacade` facade
+  - It extends default Laravel `Log` facade with logging adding class path and tracking id into context.
+- `LogWithClassPath` trait (*deprecated*)
+  - It adds convinient methods for logging to add class path and tracking id into context.
 - `LogglyHandler` class
   - It extends monolog's LogglyHandler with tags support
 
@@ -19,7 +21,32 @@ composer require onramplab/laravel-log-enhancement
 
 ## Usage
 
-### LogWithClassPath Trait
+### LoggerFacade
+
+Replace the class of `Log` alias to `LoggerFacade` in `config/app.php` as aliases.
+
+```php
+'Log' => Onramplab\LaravelLogEnhancement\Facades\LoggerFacade::class,
+```
+
+The log json will look like this:
+
+```json
+{
+  "message": "Test",
+  "context": {
+    "class_path": "App\\Fake",
+    "tracking_id": "652c3456-1a17-42b8-9fa7-9bee65e655eb"
+  },
+  "level": 200,
+  "level_name": "INFO",
+  "channel": "local",
+  "extra": {},
+  "timestamp": "2021-01-04T22:47:56.598608-0800"
+}
+```
+
+### LogWithClassPath Trait (*deprecated*)
 
 Use `LogWithClassPath` trait to let it automatically put class path into log context. You can refer to following code example.
 
@@ -44,7 +71,8 @@ The log json will look like this:
 {
   "message": "Test",
   "context": {
-    "class_path": "App\\Fake"
+    "class_path": "App\\Fake",
+    "tracking_id": "652c3456-1a17-42b8-9fa7-9bee65e655eb"
   },
   "level": 200,
   "level_name": "INFO",
