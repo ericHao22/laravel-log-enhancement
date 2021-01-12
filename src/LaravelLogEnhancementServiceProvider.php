@@ -57,8 +57,11 @@ class LaravelLogEnhancementServiceProvider extends ServiceProvider
     public function register()
     {
         // Register facade
-        $this->app->singleton('laravel-log-enhancement', function () {
-            return new LaravelLogEnhancement;
+        // $this->app->singleton('laravel-log-enhancement', function () {
+        //     return new LaravelLogEnhancement;
+        // });
+        $this->app->singleton(Logger::class, function (Application $app) {
+            return new Logger($app->make(LoggerInterface::class));
         });
     }
 
