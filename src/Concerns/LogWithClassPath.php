@@ -2,7 +2,11 @@
 namespace Onramplab\LaravelLogEnhancement\Concerns;
 
 use Illuminate\Support\Facades\Log;
+use Onramplab\LaravelLogEnhancement\Logger;
 
+/**
+ * @deprecated deprecated since version 0.3.0
+ */
 trait LogWithClassPath {
     public function debug(string $message, array $context = [])
     {
@@ -47,11 +51,13 @@ trait LogWithClassPath {
 
     protected function log(string $logLevel, string $message, array $context = [])
     {
+        $logger = app()->make(Logger::class);
+
         $className = get_class($this);
         $context = array_merge($context, [
             'class_path' => $className,
         ]);
 
-        Log::log($logLevel, $message, $context);
+        $logger->{$logLevel}($message, $context);
     }
 }

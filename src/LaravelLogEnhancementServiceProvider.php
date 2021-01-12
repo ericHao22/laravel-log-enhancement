@@ -2,8 +2,10 @@
 
 namespace Onramplab\LaravelLogEnhancement;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Psr\Log\LoggerInterface;
 
 class LaravelLogEnhancementServiceProvider extends ServiceProvider
 {
@@ -57,8 +59,15 @@ class LaravelLogEnhancementServiceProvider extends ServiceProvider
     public function register()
     {
         // Register facade
-        $this->app->singleton('laravel-log-enhancement', function () {
-            return new LaravelLogEnhancement;
+        // $this->app->singleton('laravel-log-enhancement', function () {
+        //     return new LaravelLogEnhancement;
+        // });
+        $this->app->singleton(Logger::class, function (Application $app) {
+            return new Logger($app->make(LoggerInterface::class));
+        });
+
+        $this->app->bind('laravel-log-enhancement-logger',function(){
+            return app()->make(Logger::class);
         });
     }
 
