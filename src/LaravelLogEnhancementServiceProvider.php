@@ -66,8 +66,8 @@ class LaravelLogEnhancementServiceProvider extends ServiceProvider
             return new Logger($app->make(LoggerInterface::class));
         });
 
-        $this->app->bind('laravel-log-enhancement-logger',function(){
-            return app()->make(Logger::class);
+        $this->app->singleton('laravel-log-enhancement-logger', function ($app) {
+            return new LogManager($app);
         });
     }
 
