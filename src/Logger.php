@@ -48,15 +48,31 @@ class Logger extends IlluminateLogger
      */
     protected function writeLog($level, $message, $context)
     {
-        // attach class_path
-        // NOTE: it's hardcoded, should find a better way to get caller class
-        $caller = debug_backtrace();
-        $caller = $caller[4];
-        $context['class_path'] = $caller['class'];
-
-        // attach tracking_id
-        $context['tracking_id'] = $this->debugId;
+        $info = $this->generateExtraContextInfo();
+        $context = array_merge($context, $info);
 
         parent::writeLog($level, $message, $context);
+    }
+
+    protected function generateExtraContextInfo()
+    {
+        $info = [];
+
+        // attach class_path
+        // NOTE: it's hardcoded, should find a better way to get caller class
+        $stack = debug_backtrace();
+        $caller = $stack[2];
+
+        if ($caller['class'] === 'Illuminate\Log\LogManager') {
+            // It means log from channel
+            $caller = $stack[4];
+        }
+
+        $info['class_path'] = $caller['class'];
+
+        // attach tracking_id
+        $info['tracking_id'] = $this->debugId;
+
+        return $info;
     }
 }
