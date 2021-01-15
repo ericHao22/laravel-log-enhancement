@@ -15,10 +15,10 @@ class LoggerManagerTest extends TestCase
      */
     public function logger_instance_should_be_our_custom_logger()
     {
-      $manager = new LogManager($this->app);
+        $manager = new LogManager($this->app);
 
-      $logger = $manager->channel('stack');
+        $logger = $manager->channel('stack');
 
-      $this->assertInstanceOf(Logger::class, $logger);
+        $this->assertInstanceOf(Logger::class, $logger);
     }
 }

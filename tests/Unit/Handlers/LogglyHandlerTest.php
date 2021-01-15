@@ -15,10 +15,10 @@ class LogglyHandlerTest extends TestCase
      */
     public function constructor_should_support_tags()
     {
-      $this->handler = Mockery::mock(LogglyHandler::class)->makePartial();
+        $this->handler = Mockery::mock(LogglyHandler::class)->makePartial();
 
-      $this->handler->shouldReceive('setTag')->with(['tag1', 'tag2'])->once();
+        $this->handler->shouldReceive('setTag')->with(['tag1', 'tag2'])->once();
 
-      $this->handler->__construct('test', 'tag1,tag2');
+        $this->handler->__construct('test', 'tag1,tag2');
     }
 }
