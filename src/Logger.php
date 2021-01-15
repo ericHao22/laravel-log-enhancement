@@ -61,11 +61,11 @@ class Logger extends IlluminateLogger
         // attach class_path
         // NOTE: it's hardcoded, should find a better way to get caller class
         $stack = debug_backtrace();
-        $caller = $stack[2];
+        $caller = $stack[3];
 
         if ($caller['class'] === 'Illuminate\Log\LogManager') {
             // It means log from channel
-            $caller = $stack[4];
+            $caller = $stack[5];
         }
 
         $info['class_path'] = $caller['class'];
