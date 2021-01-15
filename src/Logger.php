@@ -2,44 +2,77 @@
 
 namespace Onramplab\LaravelLogEnhancement;
 
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Log\Logger as IlluminateLogger;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 
-class Logger
+class Logger extends IlluminateLogger
 {
+    /**
+     * @var string
+     */
     protected $debugId;
+
+    /**
+     * LoggerInterface
+     */
     protected $logger;
 
     /**
-     * Create an instance of the QueryLogger class
-     *
-     * @param \Psr\Log\LoggerInterface $logger
-     * @return void
-     *
-     * @throws \Ramsey\Uuid\Exception\UnsatisfiedDependencyException
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @var string
      */
-    public function __construct(LoggerInterface $logger)
+    protected $channelName;
+
+    /**
+     * Create a new log writer instance.
+     *
+     * @param  \Psr\Log\LoggerInterface  $logger
+     * @param  \Illuminate\Contracts\Events\Dispatcher|null  $dispatcher
+     * @return void
+     */
+    public function __construct(LoggerInterface $logger, Dispatcher $dispatcher = null)
     {
         $this->logger = $logger;
+        $this->dispatcher = $dispatcher;
         $this->debugId = Uuid::uuid4()->toString();
-        //
     }
 
-    public function __call($name, $arguments)
+    /**
+     * Write a message to the log.
+     *
+     * @param  string  $level
+     * @param  string  $message
+     * @param  array  $context
+     * @return void
+     */
+    protected function writeLog($level, $message, $context)
     {
-        $message = $arguments[0];
-        $context = $arguments[1] ?? [];
+        $info = $this->generateExtraContextInfo();
+        $context = array_merge($context, $info);
 
-        // attach caller class
-        $caller = debug_backtrace();
-        $caller = $caller[2];
-        $context['class_path'] = $caller['class'];
+        parent::writeLog($level, $message, $context);
+    }
+
+    protected function generateExtraContextInfo()
+    {
+        $info = [];
+
+        // attach class_path
+        // NOTE: it's hardcoded, should find a better way to get caller class
+        $stack = debug_backtrace();
+        $caller = $stack[2];
+
+        if ($caller['class'] === 'Illuminate\Log\LogManager') {
+            // It means log from channel
+            $caller = $stack[4];
+        }
+
+        $info['class_path'] = $caller['class'];
 
         // attach tracking_id
-        $context['tracking_id'] = $this->debugId;
+        $info['tracking_id'] = $this->debugId;
 
-        $this->logger->log($name, $message, $context);
+        return $info;
     }
 }

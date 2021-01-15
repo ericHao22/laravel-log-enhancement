@@ -8,8 +8,6 @@ A library with logging enhancement. Including:
 
 - `LoggerFacade` facade
   - It extends default Laravel `Log` facade with logging adding class path and tracking id into context.
-- `LogWithClassPath` trait (*deprecated*)
-  - It adds convinient methods for logging to add class path and tracking id into context.
 - `LogglyHandler` class
   - It extends monolog's LogglyHandler with tags support
 
@@ -27,42 +25,6 @@ Replace the class of `Log` alias to `LoggerFacade` in `config/app.php` as aliase
 
 ```php
 'Log' => Onramplab\LaravelLogEnhancement\Facades\LoggerFacade::class,
-```
-
-The log json will look like this:
-
-```json
-{
-  "message": "Test",
-  "context": {
-    "class_path": "App\\Fake",
-    "tracking_id": "652c3456-1a17-42b8-9fa7-9bee65e655eb"
-  },
-  "level": 200,
-  "level_name": "INFO",
-  "channel": "local",
-  "extra": {},
-  "timestamp": "2021-01-04T22:47:56.598608-0800"
-}
-```
-
-### LogWithClassPath Trait (*deprecated*)
-
-Use `LogWithClassPath` trait to let it automatically put class path into log context. You can refer to following code example.
-
-```php
-namespace App;
-
-use Onramplab\LaravelLogEnhancement\Concerns\LogWithClassPath;
-
-class Fake {
-  use LogWithClassPath;
-
-  public function run()
-  {
-    $this->info('Test');
-  }
-}
 ```
 
 The log json will look like this:
