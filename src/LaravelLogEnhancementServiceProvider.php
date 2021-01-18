@@ -3,9 +3,10 @@
 namespace Onramplab\LaravelLogEnhancement;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
-use Psr\Log\LoggerInterface;
+use Queue;
 
 class LaravelLogEnhancementServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,7 @@ class LaravelLogEnhancementServiceProvider extends ServiceProvider
         // $this->loadViewsFrom(__DIR__.'/resources/views', 'laravel-log-enhancement');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         // $this->registerRoutes();
+        $this->registerHooks();
     }
 
     /**
@@ -58,16 +60,16 @@ class LaravelLogEnhancementServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register facade
-        // $this->app->singleton('laravel-log-enhancement', function () {
-        //     return new LaravelLogEnhancement;
-        // });
-        $this->app->singleton(Logger::class, function (Application $app) {
-            return new Logger($app->make(LoggerInterface::class));
-        });
-
-        $this->app->singleton('laravel-log-enhancement-logger', function ($app) {
+        $this->app->singleton('laravel-log-enhancement-logger', function (Application $app) {
             return new LogManager($app);
+        });
+    }
+
+    public function registerHooks()
+    {
+        Queue::before(function () {
+            $this->app->forgetInstance('laravel-log-enhancement-logger');
+            Facade::clearResolvedInstance('laravel-log-enhancement-logger');
         });
     }
 
