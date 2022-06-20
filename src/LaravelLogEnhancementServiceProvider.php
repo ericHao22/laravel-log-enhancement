@@ -60,7 +60,7 @@ class LaravelLogEnhancementServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('laravel-log-enhancement-logger', function (Application $app) {
+        $this->app->singleton('log', function (Application $app) {
             return new LogManager($app);
         });
     }
@@ -68,8 +68,8 @@ class LaravelLogEnhancementServiceProvider extends ServiceProvider
     public function registerHooks()
     {
         Queue::before(function () {
-            $this->app->forgetInstance('laravel-log-enhancement-logger');
-            Facade::clearResolvedInstance('laravel-log-enhancement-logger');
+            $this->app->forgetInstance('log');
+            Facade::clearResolvedInstance('log');
         });
     }
 
