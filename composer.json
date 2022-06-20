@@ -11,7 +11,7 @@
         }
     ],
     "minimum-stability": "dev",
-    "prefer-stable":true,
+    "prefer-stable": true,
     "require": {
         "monolog/monolog": "^1.12|^2.0",
         "ramsey/uuid": "^4.0.0"
@@ -36,7 +36,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Onramplab\\LaravelLogEnhancement\\Tests\\":"tests/"
+            "Onramplab\\LaravelLogEnhancement\\Tests\\": "tests/"
         }
     },
     "config": {
@@ -51,10 +51,7 @@
         "laravel": {
             "providers": [
                 "Onramplab\\LaravelLogEnhancement\\LaravelLogEnhancementServiceProvider"
-            ],
-            "aliases": {
-                "Onramplab": "Onramplab\\LaravelLogEnhancement\\LaravelLogEnhancementFacade"
-            }
+            ]
         }
     }
 }
