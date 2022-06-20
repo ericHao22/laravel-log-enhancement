@@ -8,11 +8,6 @@ commands:
       - restore_cache:
           key: dependency-cache-composer-{{ checksum "composer.json" }}
       - run:
-          name: Install php extensions
-          command: |
-            sudo docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd
-            sudo docker-php-ext-install pcntl pdo_mysql
-      - run:
           name: Install composer packages
           command: |
             composer install
@@ -33,7 +28,7 @@ jobs:
   run_test:
     working_directory: ~/app
     docker:
-      - image: circleci/php:7.4.3
+      - image: cimg/php:7.4.26
     steps:
       - run_test
 
