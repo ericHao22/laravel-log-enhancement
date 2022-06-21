@@ -6,7 +6,7 @@
 
 A library with logging enhancement. Including:
 
-- `LoggerFacade` facade
+- Overriding `Log` facade
   - It extends default Laravel `Log` facade with logging adding class path and tracking id into context.
 - `LogglyHandler` class
   - It extends monolog's LogglyHandler with tags support
@@ -20,12 +20,6 @@ composer require onramplab/laravel-log-enhancement
 ## Usage
 
 ### LoggerFacade
-
-Replace the class of `Log` alias to `LoggerFacade` in `config/app.php` as aliases.
-
-```php
-'Log' => Onramplab\LaravelLogEnhancement\Facades\LoggerFacade::class,
-```
 
 The log json will look like this:
 
