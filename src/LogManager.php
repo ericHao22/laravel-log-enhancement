@@ -52,12 +52,13 @@ class LogManager extends IlluminateLoggerManager
      * Attempt to get the log from the local cache.
      *
      * @param  string  $name
+     * @param  array|null  $config
      * @return \Psr\Log\LoggerInterface
      */
-    protected function get($name)
+    protected function get($name, ?array $config = null)
     {
         try {
-            return $this->channels[$name] ?? with($this->resolve($name), function ($logger) use ($name) {
+            return $this->channels[$name] ?? with($this->resolve($name, $config), function ($logger) use ($name) {
                 return $this->channels[$name] = $this->tap($name, new Logger($logger, $this->app['events']));
             });
         } catch (Throwable $e) {
