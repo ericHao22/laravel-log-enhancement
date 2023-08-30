@@ -68,6 +68,41 @@ return [
 
 ```
 
+### DatadogHandler
+
+You can adding following block into `config/logging.php`.
+
+```php
+use Monolog\Formatter\JsonFormatter;
+use Onramplab\LaravelLogEnhancement\Handlers\DatadogHandler;
+
+return [
+  //...
+
+  'channels' => [
+    //...
+
+    'datadog' => [
+      'driver' => 'monolog',
+      'level' => 'info',
+      'handler' => DatadogHandler::class,
+      'handler_with' => [
+          'key' => env('DD_LOG_API_KEY'),
+          'region' => env('DD_LOG_REGION', 'us5'),
+          'attributes' => [
+              'hostname' => gethostname(),
+              'source' => env('DD_LOG_SOURCE', 'laravel'),
+              'service' => env('DD_LOG_SERVICE'),
+              'tags' => env('DD_LOG_TAG'),
+          ],
+      ],
+      'formatter' => JsonFormatter::class,
+    ],
+  ]
+];
+
+```
+
 ## Testing
 
 Run the tests with:
