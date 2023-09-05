@@ -8,6 +8,7 @@ use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Handler\Curl\Util;
 use Monolog\Handler\MissingExtensionException;
 use Monolog\Logger;
+use Monolog\LogRecord;
 
 class DatadogHandler extends AbstractProcessingHandler
 {
@@ -56,21 +57,21 @@ class DatadogHandler extends AbstractProcessingHandler
     /**
      * Handles a log record
      */
-    protected function write(array $record): void
+    protected function write(LogRecord $record): void
     {
-        $this->send($record['formatted']);
+        $this->send($record->formatted);
     }
 
     /**
      * Send request to @link https://docs.datadoghq.com/api/latest/logs/?code-lang=curl#send-logs
      * @param string $record
      */
-    protected function send($record): void
+    protected function send(string $data): void
     {
         $parameters = [
             'ddsource' => $this->getSource(),
             'hostname' => $this->getHostname(),
-            'service' => $this->getService($record),
+            'service' => $this->getService($data),
             'ddtags' =>  $this->getTags()
         ];
         $queryString = http_build_query($parameters);
@@ -86,7 +87,7 @@ class DatadogHandler extends AbstractProcessingHandler
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $record);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
