@@ -11,10 +11,19 @@ A library with logging enhancement. Including:
 - `LogglyHandler` class
   - It extends monolog's LogglyHandler with tags support
 
+- `DatadogHandler` class
+  - It supports Datadog Logs
+
 ## Install
 
 ```bash
 composer require onramplab/laravel-log-enhancement
+```
+
+- use Datadog APM to connect php logs and traces
+```bash
+curl -LO https://github.com/DataDog/dd-trace-php/releases/latest/download/datadog-setup.php
+sudo php datadog-setup.php --php-bin=all
 ```
 
 ## Usage
